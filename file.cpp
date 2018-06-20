@@ -1,0 +1,256 @@
+#include<iostream>
+#include<stdlib.h>
+#include<stdio.h>
+using namespace std;
+#define M 100
+int n=0;																							 //定义一个全局变量
+typedef struct people  
+{  
+	char id[10];//工号
+    char name[10];//姓名  
+    float money1;//岗位工资  
+	float money2;//薪级工资
+	float money3;//职务津贴
+	float money4;//绩效工资
+	float money;//应发工资
+	float tax;//个人所得税
+	float wages;//实发工资
+}ZGGZ;//工资数据结构体
+
+
+int menu_select()																					//功能选择模块
+{  
+    char c;  
+    do  
+    {  
+        system("cls");  
+        printf("\n\t\t**********工资管理系统**********\n");  
+        printf("\t\t┌------------------------------┐\n");  
+        printf("\t\t│        1.查询职工工资        │\n");  
+        printf("\t\t│        2.修改职工工资        │\n");  
+        printf("\t\t│        3.添加职工工资        │\n");  
+        printf("\t\t│        4.删除职工工资        │\n");  
+        printf("\t\t│        5.浏览职工工资        │\n");  
+        printf("\t\t│        6.保存职工工资        │\n");  
+        printf("\t\t│        7.退出                │\n");  
+        printf("\t\t└------------------------------┘\n");  
+        printf("\t\t请您选择(1-7):");      
+        c=getchar();   
+    }while(c<'1'||c>'7');//检查输入是否符合规范  
+    return(c-'0');  
+}  
+
+int read(ZGGZ t[])																					//文件读取模块
+{
+	   int i;
+       FILE *fp;//定义文件指针
+       if ((fp = fopen("gz.dat", "rb")) == NULL)
+       {
+              printf("工资数据文件打开失败，请检查文件是否存在或损坏后重试!");
+              return 0;
+       }
+	   fscanf(fp,"%d",&n);
+	   for(i=0;i<n;i++)
+		   fscanf(fp,"%10s%10s%f%f%f%f%f%f%f",t[i].id,t[i].name,&t[i].money1,&t[i].money2,&t[i].money3,&t[i].money4,&t[i].money,&t[i].tax,&t[i].wages);
+       fclose(fp);
+       return 0;
+}
+
+int find(ZGGZ S[])																					 //工资查询模块  
+{  
+	int m,j;  
+    char flag='y';  
+    while(flag!='n'&&flag!='N')  
+    {  
+		system("cls");
+        printf("\n\t\t***********查询方式************\n");  
+        printf("\t\t┌------------------------------┐\n");  
+        printf("\t\t│          1.查找工号          │\n");  
+        printf("\t\t│          2.查找姓名          │\n");  
+        printf("\t\t│          3.返回              │\n");    
+        printf("\t\t└------------------------------┘\n");  
+        printf("\n\t\t请选择查询方式:");  
+        scanf("\t\t%d",&m);					//选择查询方式  
+	
+		do										//检查输入是否符合规范  
+			{  
+				j=0;  
+				if(m!=1&&m!=2&&m!=3)  
+				{     
+					j=1;  
+					printf("\t\t您输入的查询方式不存在,请重新输入:");  
+					scanf("\t\t%d",&m);			//不符合规范则重新选择查询方式  
+				}  
+			}while(j); 
+
+		if(m==1)								//工号查询
+			{
+				int i;							//现在查询员工序号
+				int flag=0;						//标记员工有没有存在
+				char gonghao[10];
+				printf("\n");
+				printf("请输入要查询员工的编号：");
+				scanf("%s",gonghao);
+				for (i = 0; i < n; i++)
+				{
+					if (strcmp(S[i].id,gonghao)==0)
+					{
+						flag = 1;
+						break;
+					}
+				}
+				if (flag)
+				{
+					printf("\t\t姓名:%s\n",S[i].name);  
+					printf("\t\t岗位工资:%f\n",S[i].money1);  
+					printf("\t\t薪级工资:%f\n",S[i].money2);  
+					printf("\t\t职务津贴:%f\n",S[i].money3);  
+					printf("\t\t绩效工资:%f\n",S[i].money4);  
+					printf("\t\t应发工资:%f\n",S[i].money);
+					printf("\t\t个人所得税:%f\n",S[i].tax);  
+					printf("\t\t实发工资:%f\n",S[i].wages);  
+				}
+				else
+				{
+					printf("没有找到该编号的员工！\n");
+				}
+				printf("\n");
+				system("pause");
+			}
+
+		if(m==2)								//姓名查询
+		{
+			int i;								//现在查询员工序号
+			int flag=0;							//标记员工有没有存在
+			char nm[10];
+			printf("\n");
+			printf("请输入要查询员工的姓名：");
+			scanf("%s",nm);
+			for (i = 0; i < n; i++)
+			{
+				if (strcmp(S[i].name,nm)==0)
+				{
+					flag = 1;
+					break;
+				}
+			}
+			if (flag)
+			{
+				printf("\t\t工号:%s\n",S[i].id);  
+				printf("\t\t岗位工资:%f\n",S[i].money1);  
+				printf("\t\t薪级工资:%f\n",S[i].money2);  
+				printf("\t\t职务津贴:%f\n",S[i].money3);  
+				printf("\t\t绩效工资:%f\n",S[i].money4);  
+				printf("\t\t应发工资:%f\n",S[i].money);
+				printf("\t\t个人所得税:%f\n",S[i].tax);  
+				printf("\t\t实发工资:%f\n",S[i].wages);  
+			}
+			else
+			{
+				printf("没有找到该姓名的员工！\n");
+			}
+			printf("\n");
+			system("pause");
+		}
+
+		if(m==3)							    	//返回
+		{
+			return 0;
+		}
+
+		printf("\t\t是否继续查询?(Y/N)");  
+		scanf("\t\t%c",&flag);  
+	}
+	return 0;  
+}  
+
+void add_money(ZGGZ S[])									//自检模块 计算应发工资       
+{
+	for(int i=0;i<n;i++)
+		S[i].money=S[i].money1+S[i].money2+S[i].money3+S[i].money4;
+}
+
+void grsds(ZGGZ S[])										//自检模块 计算个人所得税       
+{
+	for(int i=0;i<n;i++)
+	{
+		if(S[i].money<500)																									//工资小于500时个人所得税																											
+			S[i].tax=S[i].money*0.05;
+		else if(S[i].money<2000)																							//工资大于500小于2000时个人所得税
+			S[i].tax=(S[i].money-2000)*0.1+500*0.05;	
+		else if(S[i].money<5000)																							//工资大于2000小于5000时个人所得税
+			S[i].tax=(S[i].money-5000)*0.15+1500*0.1+500*0.05;														     			
+		else if(S[i].money<20000)																							//工资大于5000小于20000时个人所得税
+			S[i].tax=(S[i].money-20000)*0.2+15000*0.15+1500*0.1+500*0.05;														    
+		else if(S[i].money<40000)																							//工资大于20000小于40000时个人所得税
+			S[i].tax=(S[i].money-40000)*0.25+20000*0.2+15000*0.15+1500*0.1+500*0.05;											     
+		else if(S[i].money<60000)																							//工资大于40000小于60000时个人所得税
+			S[i].tax=(S[i].money-60000)*0.3+20000*0.25+20000*0.2+15000*0.15+1500*0.1+500*0.05;								     		
+		else if(S[i].money<80000)																							//工资大于60000小于80000时个人所得税
+			S[i].tax=(S[i].money-80000)*0.35+20000*0.3+20000*0.25+20000*0.2+15000*0.15+1500*0.1+500*0.05;		     				
+		else if(S[i].money<100000)																							//工资大于80000小于100000时个人所得税
+			S[i].tax=(S[i].money-80000)*0.4+20000*0.35+20000*0.3+20000*0.25+20000*0.2+15000*0.15+1500*0.1+500*0.05;				
+		else																												//工资大于100000时个人所得税
+			S[i].tax=(S[i].money-100000)*0.45+20000*0.4+20000*0.35+20000*0.3+20000*0.25+20000*0.2+15000*0.15+1500*0.1+500*0.05;		
+	}
+}
+
+void add_wages(ZGGZ S[])									//自检模块 计算实发工资	       
+{
+	for(int i=0;i<n;i++)
+		S[i].wages=S[i].money-S[i].tax;
+}
+
+int main()
+{
+	
+	ZGGZ adr[M];
+	read(adr);
+	add_money(adr);
+	grsds(adr);
+	add_wages(adr);
+	for(;;)  
+    {  
+        switch(menu_select())  
+        {  
+        case 1:  
+            printf("\n\t\t查询职工工资数据\n");  
+            find(adr);  
+            system("pause");  
+            break;  
+        case 2:  
+            printf("\n\t\t功能尚未完善，请尽情期待\n");   
+//            modify();  
+            system("pause");  
+            break;  
+        case 3:  
+            printf("\n\t\t功能尚未完善，请尽情期待\n");  
+//            add()  
+            system("pause");  
+            break;  
+        case 4:  
+            printf("\n\t\t功能尚未完善，请尽情期待\n");  
+//            del();  
+            system("pause");  
+            break;  
+        case 5:  
+            printf("\n\t\t功能尚未完善，请尽情期待\n");  
+//            list();  
+            system("pause");  
+            break;  
+        case 6:  
+            printf("\n\t\t功能尚未完善，请尽情期待\n");  
+//            write();  
+            system("pause");  
+            break;  
+
+        case 7:      
+            printf("\n\t\t谢谢使用，再见!\n");  //结束程序      
+            printf("\n\t\t");      
+            system("pause");      
+            exit(0);      
+        }  
+    }  
+
+	return 0;
+}
