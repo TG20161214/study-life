@@ -17,73 +17,6 @@ typedef struct people
 	float wages;//实发工资
 }ZGGZ;//工资数据结构体
 
-void del(ZGGZ zggz[])  //删除函数
-{
-    string gohao;//定义字符串
-    int i,j,k,p;
-    cout<<"       ********************请输入你要查询的工号或姓名*******************"<<endl;//通过工号或姓名进行查找
-    cin>>gohao;
-
-    for(i=0;i<n;i++)
-        {
-            if(zggz[i].id==gohao||zggz[i].name==gohao)
-                {
-                   cout<<"删除的职工信息为："<<endl;//输出职工修改信息前的信息
-                   cout<<"工号 "<<"姓名   "<<"岗位工资 "<<"薪级工资 "<<"职务津贴 "<<"绩效工资 "<<"应发工资 "<<"个人所得税 "<<"实发工资 "<<endl;
-                   cout<<zggz[i].id<<" "<<zggz[i].name<<"      "<<zggz[i].gangwei<<"      "<<zggz[i].xinji<<"      "<<zggz[i].zhiwu<<"      ";
-                   cout<<zggz[i].jixiao<<"      "<<zggz[i].yingfa<<"      "<<zggz[i].geren<<"      "<<zggz[i].shifa<<endl;
-
-                   cout<<"       ****************输入1表示确认删除，输入0表示放弃删除***************"<<endl;
-                   cin>>k;
-                   if(k==1)
-                       {
-                          for(j=i;j<n-1;j++)
-                               {	
-                                  zggz[j]=zggz[j+1];
-                               }
-                   n=n-1;
-
-                   cout<<"       ****************输入1表示确认保存，输入0表示放弃保存***************"<<endl;
-                   cin>>p;
-                   if(p==1)
-                        {
-                           wirte(zggz);//确认删除的操作
-                           return;
-                        }
-
-                   else
-                        {
-                           cout<<"       *************职工信息已修改，请你进行下一步命令！*****************"<<endl;//放弃删除后的操作
-                           return;
-                        }
-
-                   cout<<"删除后剩余职工的信息为："<<endl;
-                   cout<<"工号 "<<"姓名   "<<"岗位工资 "<<"薪级工资 "<<"职务津贴 "<<"绩效工资 "<<"应发工资 "<<"个人所得税 "<<"实发工资 "<<endl;
-                   for(i=0;i<n;i++)
-                        {
-                           cout<<zggz[i].id<<" "<<zggz[i].name<<"      "<<zggz[i].gangwei<<"      "<<zggz[i].xinji<<"      "<<zggz[i].zhiwu<<"      ";
-                           cout<<zggz[i].jixiao<<"      "<<zggz[i].yingfa<<"      "<<zggz[i].geren<<"      "<<zggz[i].shifa<<endl;
-                        }
-
-                   cout<<"       *********************请你进行下一步命令！*************************"<<endl;
-                   return;
-                       }
-
-                   else
-                       {
-                          cout<<"       *********************请你进行下一步命令！*************************"<<endl;//未找到职工信息后的操作
-                          return;
-                       }
-                }
-        }
-
-    if(n==i)
-        {
-           cout<<"系统中找不到此职工信息，请你核实你输入的工号或姓名是否有错，请重新输入查询命令再进行查询"<<endl;
-        }
-    cout<<"       *********************请你进行下一步命令！*************************"<<endl;
-}
-
 
 int menu_select()																					//功能选择模块
 {  
@@ -581,8 +514,8 @@ int main()
             system("pause");  
             break;  
         case 4:  
-            printf("\n\t\t功能尚未完善，请尽情期待\n");  
-//            del();  
+
+            del();  
             system("pause");  
             break;  
         case 5:  
