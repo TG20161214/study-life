@@ -40,6 +40,7 @@ int menu_select()																					//功能选择模块
     return(c-'0');  
 }  
 
+
 int read(ZGGZ t[])																					//文件读取模块
 {
 	   int i;
@@ -488,6 +489,73 @@ int add(ZGGZ S[])																			//	添加模板
 	return 0;
 }
 
+int del(ZGGZ S[])						//删除模块
+{
+	int i;							//现在查询员工序号
+	int m=0;						//删除标志量
+	int j;
+	char flag;
+	char gonghao[10];
+	while(flag!='n'&&flag!='N')
+	{
+		system("cls");
+		printf("\n\t\t***********数据删除************\n\n");  
+		printf("\n");
+		printf("请输入要删除员工的工号：");
+		scanf("%s",gonghao);
+		for (i = 0; i < n; i++)
+		{
+			if (strcmp(S[i].id,gonghao)==0)
+			{
+				m = 1;
+				break;
+			}
+		}
+		if (m)
+		{
+			printf("\n已查询到工位为%s的职工，他的名字是%s\n",S[i].id,S[i].name);
+			printf("是否确定删除?(Y/N)");  
+			scanf("\t\t%c",&flag);
+			do																													//检查输入是否符合规范  
+			{  
+				j=0;  
+				if(flag!='Y' && flag!='y' && flag!='N' && flag!='n')  
+				{     
+					j=1;  
+					printf("请输入（Y/N）\n");  
+					scanf("\t\t%c",&flag);																							//不符合规范则重新选择浏览方式  
+				}  
+			}while(j); 
+		}
+		else
+		{
+			printf("没有找到该工号的员工！\n");
+		}
+		if(flag=='y' || flag=='Y')											//确认删除
+		{
+			n--;
+			for(;i<n;i++)
+			{
+				strcpy(S[i].id,S[i+1].id);
+				strcpy(S[i].name,S[i+1].name);
+				S[i].money1=S[i+1].money1;
+				S[i].money2=S[i+1].money2;
+				S[i].money3=S[i+1].money3;
+				S[i].money4=S[i+1].money4;
+			}
+			add_money(S);
+			grsds(S);
+			add_wages(S);
+			printf("\n删除成功\n");
+		}
+		flag='y';
+		printf("是否继续删除?(Y/N)\n");
+		scanf("\t\t%c",&flag);
+	}
+	printf("即将返回主菜单");
+	return 0;
+}
+
 int main()
 {
 	
@@ -513,9 +581,8 @@ int main()
             add(adr);  
             system("pause");  
             break;  
-        case 4:  
-
-            del();  
+        case 4:   
+            del(adr);  
             system("pause");  
             break;  
         case 5:  
